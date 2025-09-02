@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Excluir Colaborador</title></head>
+<body>
+    <h1>Excluir Colaborador</h1>
+    <p>Tem certeza que deseja excluir <strong>{{ colaborador.nome }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar Exclusão</button>
+        <a href="{% url 'listar_colaboradores' %}">Cancelar</a>
+    </form>
+</body>
+</html>

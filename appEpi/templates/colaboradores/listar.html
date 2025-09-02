@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head><title>Colaboradores</title></head>
+<body>
+    <h1>Colaboradores</h1>
+    <a href="{% url 'dashboard' %}">Dashboard</a> | 
+    <a href="{% url 'cadastrar_colaborador' %}">Cadastrar Colaborador</a> | 
+    <a href="{% url 'logout' %}">Sair</a>
+
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Nome</th><th>Função</th><th>Setor</th><th>Ações</th>
+        </tr>
+        {% for c in colaboradores %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.nome }}</td>
+            <td>{{ c.funcao }}</td>
+            <td>{{ c.setor }}</td>
+            <td>
+                <a href="{% url 'editar_colaborador' c.id %}">Editar</a> | 
+                <a href="{% url 'excluir_colaborador' c.id %}">Excluir</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">Nenhum colaborador cadastrado.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

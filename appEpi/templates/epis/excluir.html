@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Excluir EPI</title></head>
+<body>
+    <h1>Excluir EPI</h1>
+    <p>Tem certeza que deseja excluir o EPI <strong>{{ epi.nome }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar Exclusão</button>
+        <a href="{% url 'listar_epis' %}">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Editar EPI</title></head>
+<body>
+    <h1>Editar EPI</h1>
+    <a href="{% url 'listar_epis' %}">Voltar</a>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+</body>
+</html>

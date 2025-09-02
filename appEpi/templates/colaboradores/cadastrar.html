@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Cadastrar Colaborador</title></head>
+<body>
+    <h1>Cadastrar Colaborador</h1>
+    <a href="{% url 'listar_colaboradores' %}">Voltar</a>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+</body>
+</html>

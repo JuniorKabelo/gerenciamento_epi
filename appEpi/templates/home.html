@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Bem-vindo, {{ user.username }}!</h1>
+
+<div class="row my-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total de Colaboradores</h5>
+                <p class="card-text fs-3">{{ total_colaboradores }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">EPIs Disponíveis</h5>
+                <p class="card-text fs-3">{{ total_epis }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Últimos empréstimos</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Colaborador</th>
+            <th>EPI</th>
+            <th>Qtd</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if emprestimos %}
+            {% for emp in emprestimos %}
+                <tr>
+                    <td>{{ emp.data }}</td>
+                    <td>{{ emp.colaborador.nome }}</td>
+                    <td>{{ emp.epi.nome }}</td>
+                    <td>{{ emp.quantidade }}</td>
+                    <td>{{ emp.status }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5">Nenhum empréstimo.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
