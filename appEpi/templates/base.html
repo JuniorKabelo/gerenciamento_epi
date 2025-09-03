@@ -12,6 +12,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{% url 'listar_colaboradores' %}">Colaboradores</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'listar_epis' %}">EPIs</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'listar_emprestimos' %}">Empréstimos</a></li>  <!-- NOVO -->
             </ul>
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}

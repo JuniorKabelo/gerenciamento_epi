@@ -19,4 +19,8 @@ urlpatterns = [
     path('epis/cadastrar/', views.cadastrar_epi, name='cadastrar_epi'),
     path('epis/editar/<int:id>/', views.editar_epi, name='editar_epi'),
     path('epis/excluir/<int:id>/', views.excluir_epi, name='excluir_epi'),
+        # Empréstimos
+    path('emprestimos/', views.listar_emprestimos, name='listar_emprestimos'),
+    path('emprestimos/registrar/', views.registrar_emprestimo, name='registrar_emprestimo'),
+    path('emprestimos/devolver/<int:id>/', views.registrar_devolucao, name='registrar_devolucao'),
 ]

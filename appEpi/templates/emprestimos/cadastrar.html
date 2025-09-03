@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h2>Cadastrar EPI</h2>
+<h2>Registrar Empréstimo</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Salvar</button>
-    <a href="{% url 'listar_epis' %}">Cancelar</a>
-    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Voltar</a>
-
+    <a href="{% url 'listar_emprestimos' %}">Cancelar</a>
 </form>
 {% endblock %}

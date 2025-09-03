@@ -8,6 +8,8 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Salvar</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Voltar</a>
+
     </form>
 </body>
 </html>

@@ -8,6 +8,8 @@
         {% csrf_token %}
         <button type="submit">Confirmar Exclusão</button>
         <a href="{% url 'listar_epis' %}">Cancelar</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Voltar</a>
+
     </form>
 </body>
 </html>

@@ -124,3 +124,37 @@ def home(request):
         'total_epis': total_epis,
         'emprestimos': emprestimos,
     })
+# EMPRESTIMOS
+@login_required
+def listar_emprestimos(request):
+    emprestimos = Emprestimo.objects.select_related('colaborador', 'epi').all()
+    return render(request, 'emprestimos/listar.html', {'emprestimos': emprestimos})
+
+@login_required
+def registrar_emprestimo(request):
+    if request.method == 'POST':
+        form = EmprestimoForm(request.POST)
+        if form.is_valid():
+            emprestimo = form.save(commit=False)
+            if emprestimo.quantidade <= emprestimo.epi.quantidade:
+                emprestimo.epi.quantidade -= emprestimo.quantidade
+                emprestimo.epi.save()
+                emprestimo.save()
+                return redirect('listar_emprestimos')
+            else:
+                form.add_error('quantidade', 'Quantidade maior que o estoque disponível.')
+    else:
+        form = EmprestimoForm()
+    return render(request, 'emprestimos/cadastrar.html', {'form': form})
+
+@login_required
+def registrar_devolucao(request, id):
+    emprestimo = get_object_or_404(Emprestimo, id=id)
+    if request.method == 'POST':
+        if emprestimo.status == 'Em uso':
+            emprestimo.status = 'Devolvido'
+            emprestimo.epi.quantidade += emprestimo.quantidade
+            emprestimo.epi.save()
+            emprestimo.save()
+        return redirect('listar_emprestimos')
+    return render(request, 'emprestimos/devolver.html', {'emprestimo': emprestimo})
