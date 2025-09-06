@@ -1,0 +1,20 @@
+# Python/Django
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Banco local
+db.sqlite3
+*.sqlite3
+
+# Configs locais
+.env
+.vscode/
+.idea/
+
+# Arquivos gerados
+media/
+staticfiles/
