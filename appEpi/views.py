@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Colaborador, Epi, Emprestimo
 from .forms import ColaboradorForm, EpiForm, EmprestimoForm
 
+# LOGIN
 def user_login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -11,7 +12,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            return redirect('home')  # redireciona para a home
         else:
             return render(request, 'login.html', {'error': 'Usuário ou senha inválidos.'})
     return render(request, 'login.html')
@@ -21,29 +22,29 @@ def user_logout(request):
     logout(request)
     return redirect('login')
 
+# DASHBOARD / HOME
 @login_required
-def dashboard(request):
+def home(request):
     total_colaboradores = Colaborador.objects.count()
     total_epis = Epi.objects.count()
-    epis_em_uso = Emprestimo.objects.filter(status='Em uso').count()
-    ultimos_emprestimos = Emprestimo.objects.order_by('-data_emprestimo')[:5]
+    epis_em_uso = Emprestimo.objects.filter(status='Em uso').count()  # 🔥 ADICIONADO
+    emprestimos = Emprestimo.objects.select_related('colaborador', 'epi').order_by('-data_emprestimo')[:5]
 
     context = {
         'total_colaboradores': total_colaboradores,
         'total_epis': total_epis,
-        'epis_em_uso': epis_em_uso,
-        'ultimos_emprestimos': ultimos_emprestimos,
+        'epis_em_uso': epis_em_uso,  # 🔥 ADICIONADO
+        'emprestimos': emprestimos,
         'usuario': request.user,
     }
     return render(request, 'home.html', context)
 
-# Listar colaboradores
+# COLABORADORES
 @login_required
 def listar_colaboradores(request):
     colaboradores = Colaborador.objects.all()
     return render(request, 'colaboradores/listar.html', {'colaboradores': colaboradores})
 
-# Cadastrar colaborador
 @login_required
 def cadastrar_colaborador(request):
     if request.method == 'POST':
@@ -55,7 +56,6 @@ def cadastrar_colaborador(request):
         form = ColaboradorForm()
     return render(request, 'colaboradores/cadastrar.html', {'form': form})
 
-# Editar colaborador
 @login_required
 def editar_colaborador(request, id):
     colaborador = get_object_or_404(Colaborador, id=id)
@@ -68,7 +68,6 @@ def editar_colaborador(request, id):
         form = ColaboradorForm(instance=colaborador)
     return render(request, 'colaboradores/editar.html', {'form': form})
 
-# Excluir colaborador
 @login_required
 def excluir_colaborador(request, id):
     colaborador = get_object_or_404(Colaborador, id=id)
@@ -77,8 +76,7 @@ def excluir_colaborador(request, id):
         return redirect('listar_colaboradores')
     return render(request, 'colaboradores/excluir.html', {'colaborador': colaborador})
 
-# Similar para EPIs:
-
+# EPIs
 @login_required
 def listar_epis(request):
     epis = Epi.objects.all()
@@ -114,16 +112,7 @@ def excluir_epi(request, id):
         epi.delete()
         return redirect('listar_epis')
     return render(request, 'epis/excluir.html', {'epi': epi})
-@login_required
-def home(request):
-    total_colaboradores = Colaborador.objects.count()
-    total_epis = Epi.objects.count()
-    emprestimos = Emprestimo.objects.all().order_by('-data_emprestimo')[:5]  # últimos 5 empréstimos
-    return render(request, 'home.html', {
-        'total_colaboradores': total_colaboradores,
-        'total_epis': total_epis,
-        'emprestimos': emprestimos,
-    })
+
 # EMPRESTIMOS
 @login_required
 def listar_emprestimos(request):
