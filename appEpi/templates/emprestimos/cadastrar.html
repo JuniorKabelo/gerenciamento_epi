@@ -3,8 +3,20 @@
 <h2>Registrar Empréstimo</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <label for="{{ form.colaborador.id_for_label }}">Colaborador:</label>
+    {{ form.colaborador }}
+
+    <label for="{{ form.epi.id_for_label }}">EPI:</label>
+    {{ form.epi }}
+
+    <label for="{{ form.quantidade.id_for_label }}">Quantidade:</label>
+    {{ form.quantidade }}
+
+    <label for="{{ form.status.id_for_label }}">Status:</label>
+    {{ form.status }}
+
     <button type="submit">Salvar</button>
-    <a href="{% url 'listar_emprestimos' %}">Cancelar</a>
 </form>
+
 {% endblock %}

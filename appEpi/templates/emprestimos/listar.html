@@ -1,37 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Lista de Empréstimos</h2>
-<a href="{% url 'registrar_emprestimo' %}">+ Registrar Empréstimo</a>
-<table>
-    <thead>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Empréstimos</h2>
+  <a class="btn btn-warning" href="{% url 'registrar_emprestimo' %}">+ Novo Empréstimo</a>
+</div>
+
+<div class="card shadow rounded-3">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-dark">
         <tr>
-            <th>Data</th>
-            <th>Colaborador</th>
-            <th>EPI</th>
-            <th>Quantidade</th>
-            <th>Status</th>
-            <th>Ações</th>
+          <th>Data</th><th>Colaborador</th><th>EPI</th><th>Qtd</th><th>Status</th><th>Ações</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         {% for e in emprestimos %}
-        <tr>
-            <td>{{ e.data_emprestimo }}</td>
-            <td>{{ e.colaborador.nome }}</td>
-            <td>{{ e.epi.nome }}</td>
-            <td>{{ e.quantidade }}</td>
-            <td>{{ e.status }}</td>
-            <td>
-                {% if e.status == 'Em uso' %}
-                <a href="{% url 'registrar_devolucao' e.id %}">Registrar Devolução</a>
-                {% else %}
-                -
-                {% endif %}
-            </td>
+        <tr class="{% if e.status == 'Em uso' %}table-warning{% else %}table-success{% endif %}">
+          <td>{{ e.data_emprestimo }}</td>
+          <td>{{ e.colaborador.nome }}</td>
+          <td>{{ e.epi.nome }}</td>
+          <td>{{ e.quantidade }}</td>
+          <td>{{ e.status }}</td>
+          <td>
+            {% if e.status == 'Em uso' %}
+            <a class="btn btn-sm btn-success" href="{% url 'registrar_devolucao' e.id %}">Devolver</a>
+            {% else %}-{% endif %}
+          </td>
         </tr>
         {% endfor %}
-    </tbody>
-</table>
-<a href="{% url 'dashboard' %}">← Voltar</a>
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

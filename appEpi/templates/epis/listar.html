@@ -1,34 +1,32 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h2>Lista de EPIs</h2>
-<a href="{% url 'cadastrar_epi' %}">+ Novo EPI</a>
-<a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Voltar</a>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Validade</th>
-        <th>Quantidade</th>
-        <th>Ações</th>
-    </tr>
-    {% for epi in epis %}
-    <tr>
-        <td>{{ epi.id }}</td>
-        <td>{{ epi.nome }}</td>
-        <td>{{ epi.descricao }}</td>
-        <td>{{ epi.validade }}</td>
-        <td>{{ epi.quantidade }}</td>
-        <td>
-            <a href="{% url 'editar_epi' epi.id %}">Editar</a> |
-            <a href="{% url 'excluir_epi' epi.id %}">Excluir</a>
-            
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6">Nenhum EPI cadastrado.</td></tr>
-    {% endfor %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h2>EPIs</h2>
+<a class="btn btn-success" href="{% url 'cadastrar_epi' %}">+ Novo EPI</a>
+</div>
+<div class="card shadow rounded-3">
+<div class="table-responsive">
+<table class="table table-striped table-hover mb-0">
+<thead class="table-dark">
+<tr><th>Nome</th><th>Descrição</th><th>Validade</th><th>Qtd Disponível</th><th>Ações</th></tr>
+</thead>
+<tbody>
+{% for epi in epis %}
+<tr>
+<td>{{ epi.nome }}</td>
+<td>{{ epi.descricao }}</td>
+<td>{{ epi.validade }}</td>
+<td>{{ epi.quantidade_disponivel }}</td>
+<td>
+<a class="btn btn-sm btn-warning" href="{% url 'editar_epi' epi.id %}">Editar</a>
+<a class="btn btn-sm btn-danger" href="{% url 'excluir_epi' epi.id %}">Excluir</a>
+</td>
+</tr>
+{% empty %}
+<tr><td colspan="5" class="text-center text-muted">Nenhum EPI cadastrado.</td></tr>
+{% endfor %}
+</tbody>
 </table>
+</div>
+</div>
 {% endblock %}

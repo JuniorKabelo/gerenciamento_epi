@@ -12,7 +12,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')  # redireciona para a home
+            return redirect('home')
         else:
             return render(request, 'login.html', {'error': 'Usuário ou senha inválidos.'})
     return render(request, 'login.html')
@@ -26,14 +26,18 @@ def user_logout(request):
 @login_required
 def home(request):
     total_colaboradores = Colaborador.objects.count()
-    total_epis = Epi.objects.count()
-    epis_em_uso = Emprestimo.objects.filter(status='Em uso').count()  # 🔥 ADICIONADO
+
+    # calcula estoque real somando quantidade_disponivel de todos os EPIs
+    epis = Epi.objects.all()
+    total_epis_disponiveis = sum(epi.quantidade_disponivel for epi in epis)
+
+    epis_em_uso = Emprestimo.objects.filter(status='Em uso').count()
     emprestimos = Emprestimo.objects.select_related('colaborador', 'epi').order_by('-data_emprestimo')[:5]
 
     context = {
         'total_colaboradores': total_colaboradores,
-        'total_epis': total_epis,
-        'epis_em_uso': epis_em_uso,  # 🔥 ADICIONADO
+        'total_epis_disponiveis': total_epis_disponiveis,  # 🔥 valor correto do estoque
+        'epis_em_uso': epis_em_uso,
         'emprestimos': emprestimos,
         'usuario': request.user,
     }
@@ -125,9 +129,8 @@ def registrar_emprestimo(request):
         form = EmprestimoForm(request.POST)
         if form.is_valid():
             emprestimo = form.save(commit=False)
-            if emprestimo.quantidade <= emprestimo.epi.quantidade:
-                emprestimo.epi.quantidade -= emprestimo.quantidade
-                emprestimo.epi.save()
+            # usa quantidade_disponivel para validar, mas não altera a quantidade do EPI
+            if emprestimo.quantidade <= emprestimo.epi.quantidade_disponivel:
                 emprestimo.save()
                 return redirect('listar_emprestimos')
             else:
@@ -142,8 +145,7 @@ def registrar_devolucao(request, id):
     if request.method == 'POST':
         if emprestimo.status == 'Em uso':
             emprestimo.status = 'Devolvido'
-            emprestimo.epi.quantidade += emprestimo.quantidade
-            emprestimo.epi.save()
+            # não somamos nada manualmente, a quantidade_disponivel já faz o cálculo
             emprestimo.save()
         return redirect('listar_emprestimos')
     return render(request, 'emprestimos/devolver.html', {'emprestimo': emprestimo})

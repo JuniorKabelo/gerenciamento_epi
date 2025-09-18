@@ -4,10 +4,20 @@
 <h2>Cadastrar EPI</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Salvar</button>
-    <a href="{% url 'listar_epis' %}">Cancelar</a>
-    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Voltar</a>
 
+    <label for="{{ form.nome.id_for_label }}">Nome:</label>
+    {{ form.nome }}
+
+    <label for="{{ form.descricao.id_for_label }}">Descrição:</label>
+    {{ form.descricao }}
+
+    <label for="{{ form.validade.id_for_label }}">Validade:</label>
+    {{ form.validade }}
+
+    <label for="{{ form.quantidade.id_for_label }}">Quantidade:</label>
+    {{ form.quantidade }}
+
+    <button type="submit">Salvar</button>
 </form>
+
 {% endblock %}
