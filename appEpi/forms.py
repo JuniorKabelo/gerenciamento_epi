@@ -26,6 +26,7 @@ class EpiForm(forms.ModelForm):
 class EmprestimoForm(forms.ModelForm):
     class Meta:
         model = Emprestimo
+        fields = ['colaborador', 'epi', 'quantidade', 'status', 'data_devolucao']
         fields = ['colaborador', 'epi', 'quantidade', 'status']
         widgets = {
             'colaborador': forms.Select(attrs={'class': 'form-select', 'style': 'width: 300px;'}),

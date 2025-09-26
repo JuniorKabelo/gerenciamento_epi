@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import Colaborador, Epi, Emprestimo
 from .forms import ColaboradorForm, EpiForm, EmprestimoForm
+from django.utils import timezone
+from datetime import timedelta
+
 
 # LOGIN
 def user_login(request):
@@ -32,7 +35,7 @@ def home(request):
     total_epis_disponiveis = sum(epi.quantidade_disponivel for epi in epis)
 
     epis_em_uso = Emprestimo.objects.filter(status='Em uso').count()
-    emprestimos = Emprestimo.objects.select_related('colaborador', 'epi').order_by('-data_emprestimo')[:5]
+    emprestimos = Emprestimo.objects.filter(data_emprestimo__isnull=False).order_by('-data_emprestimo')[:5]
 
     context = {
         'total_colaboradores': total_colaboradores,
@@ -129,6 +132,7 @@ def registrar_emprestimo(request):
         form = EmprestimoForm(request.POST)
         if form.is_valid():
             emprestimo = form.save(commit=False)
+            
             # usa quantidade_disponivel para validar, mas não altera a quantidade do EPI
             if emprestimo.quantidade <= emprestimo.epi.quantidade_disponivel:
                 emprestimo.save()
@@ -145,7 +149,7 @@ def registrar_devolucao(request, id):
     if request.method == 'POST':
         if emprestimo.status == 'Em uso':
             emprestimo.status = 'Devolvido'
-            # não somamos nada manualmente, a quantidade_disponivel já faz o cálculo
+            emprestimo.data_real_devolucao = timezone.now().date()
             emprestimo.save()
         return redirect('listar_emprestimos')
     return render(request, 'emprestimos/devolver.html', {'emprestimo': emprestimo})

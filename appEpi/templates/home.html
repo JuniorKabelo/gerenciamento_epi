@@ -53,7 +53,13 @@
             {% if emprestimos %}
                 {% for emp in emprestimos %}
                     <tr class="{% if emp.status == 'Em uso' %}table-warning{% elif emp.status == 'Devolvido' %}table-success{% endif %}">
-                        <td>{{ emp.data|date:"d/m/Y" }}</td>
+                        <td>
+  {% if emp.data_emprestimo %}
+    {{ emp.data_emprestimo|date:"d/m/Y H:i" }}
+  {% else %}
+    <span class="text-muted">Sem data</span>
+  {% endif %}
+</td>
                         <td>{{ emp.colaborador.nome }}</td>
                         <td>{{ emp.epi.nome }}</td>
                         <td>{{ emp.quantidade }}</td>

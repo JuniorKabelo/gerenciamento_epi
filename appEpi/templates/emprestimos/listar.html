@@ -11,7 +11,14 @@
     <table class="table table-striped table-hover mb-0">
       <thead class="table-dark">
         <tr>
-          <th>Data</th><th>Colaborador</th><th>EPI</th><th>Qtd</th><th>Status</th><th>Ações</th>
+          <th>Data</th>
+          <th>Colaborador</th>
+          <th>EPI</th>
+          <th>Qtd</th>
+          <th>Status</th>
+          <th>Devolução Prevista</th>
+          <th>Data Devolvido</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -23,9 +30,24 @@
           <td>{{ e.quantidade }}</td>
           <td>{{ e.status }}</td>
           <td>
+            {{ e.data_prevista_devolucao|default:"-" }}
+          </td>
+          <td>
+            {% if e.data_real_devolucao %}
+              {{ e.data_real_devolucao }}
+              {% if e.devolvido_antes_do_prazo %}
+                <span class="text-success">✅</span>
+              {% endif %}
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          <td>
             {% if e.status == 'Em uso' %}
-            <a class="btn btn-sm btn-success" href="{% url 'registrar_devolucao' e.id %}">Devolver</a>
-            {% else %}-{% endif %}
+              <a class="btn btn-sm btn-success" href="{% url 'registrar_devolucao' e.id %}">Devolver</a>
+            {% else %}
+              -
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
