@@ -25,4 +25,7 @@ urlpatterns = [
     path('emprestimos/', views.listar_emprestimos, name='listar_emprestimos'),
     path('emprestimos/registrar/', views.registrar_emprestimo, name='registrar_emprestimo'),
     path('emprestimos/devolver/<int:id>/', views.registrar_devolucao, name='registrar_devolucao'),
+
+    # URL para os empréstimos de cada colaborador (corrigido)
+    path('colaboradores/<int:colaborador_id>/emprestimos/', views.listar_emprestimos_colaborador, name='listar_emprestimos_colaborador'),
 ]

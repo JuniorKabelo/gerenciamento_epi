@@ -1,31 +1,43 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-<h2>Colaboradores</h2>
-<a class="btn btn-primary" href="{% url 'cadastrar_colaborador' %}">+ Novo Colaborador</a>
+    <h2>Colaboradores</h2>
+    <a class="btn btn-primary" href="{% url 'cadastrar_colaborador' %}">+ Novo Colaborador</a>
 </div>
 <div class="card shadow rounded-3">
-<div class="table-responsive">
-<table class="table table-striped table-hover mb-0">
-<thead class="table-dark">
-<tr><th>Nome</th><th>Função</th><th>Setor</th><th>Ações</th></tr>
-</thead>
-<tbody>
-{% for c in colaboradores %}
-<tr>
-<td>{{ c.nome }}</td>
-<td>{{ c.funcao }}</td>
-<td>{{ c.setor }}</td>
-<td>
-<a class="btn btn-sm btn-warning" href="{% url 'editar_colaborador' c.id %}">Editar</a>
-<a class="btn btn-sm btn-danger" href="{% url 'excluir_colaborador' c.id %}">Excluir</a>
-</td>
-</tr>
-{% empty %}
-<tr><td colspan="4" class="text-center text-muted">Nenhum colaborador cadastrado.</td></tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Função</th>
+                    <th>Setor</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in colaboradores %}
+                    <tr>
+                        <td>{{ c.nome }}</td>
+                        <td>{{ c.funcao }}</td>
+                        <td>{{ c.setor }}</td>
+                        <td>
+                            <!-- Botão de Editar -->
+                            <a class="btn btn-sm btn-warning" href="{% url 'editar_colaborador' c.id %}">Editar</a>
+                            
+                            <!-- Botão de Excluir -->
+                            <a class="btn btn-sm btn-danger" href="{% url 'excluir_colaborador' c.id %}">Excluir</a>
+                            
+                            <!-- Botão de Listar Empréstimos (Novo botão) -->
+                            <a class="btn btn-sm btn-info" href="{% url 'listar_emprestimos_colaborador' c.id %}">Ver Empréstimos</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="text-center text-muted">Nenhum colaborador cadastrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

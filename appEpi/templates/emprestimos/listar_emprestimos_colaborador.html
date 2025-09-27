@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Empréstimos de {{ colaborador.nome }}</h2>
+
+    <h3>EPIs Emprestados:</h3>
+    {% if epis_emprestados %}
+        <ul>
+            {% for epi in epis_emprestados %}
+                <li>{{ epi.nome }} (Quantidade disponível: {{ epi.quantidade_disponivel }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Este colaborador não pegou nenhum EPI emprestado.</p>
+    {% endif %}
+
+    <h3>Detalhes dos Empréstimos:</h3>
+    {% if emprestimos %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>EPI</th>
+                    <th>Quantidade</th>
+                    <th>Data Empréstimo</th>
+                    <th>Data Prevista Devolução</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emprestimo in emprestimos %}
+                    <tr>
+                        <td>{{ emprestimo.epi.nome }}</td>
+                        <td>{{ emprestimo.quantidade }}</td>
+                        <td>{{ emprestimo.data_emprestimo }}</td>
+                        <td>{{ emprestimo.data_prevista_devolucao }}</td>
+                        <td>{{ emprestimo.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Este colaborador não tem empréstimos registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}

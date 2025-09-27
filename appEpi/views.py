@@ -120,7 +120,6 @@ def excluir_epi(request, id):
         return redirect('listar_epis')
     return render(request, 'epis/excluir.html', {'epi': epi})
 
-# EMPRESTIMOS
 @login_required
 def listar_emprestimos(request):
     emprestimos = Emprestimo.objects.select_related('colaborador', 'epi').all()
@@ -153,3 +152,19 @@ def registrar_devolucao(request, id):
             emprestimo.save()
         return redirect('listar_emprestimos')
     return render(request, 'emprestimos/devolver.html', {'emprestimo': emprestimo})
+
+@login_required
+def listar_emprestimos_colaborador(request, colaborador_id):
+    colaborador = get_object_or_404(Colaborador, id=colaborador_id)
+    
+    # Filtra os empréstimos feitos pelo colaborador
+    emprestimos = Emprestimo.objects.filter(colaborador=colaborador)
+    
+    # Recupera os EPIs emprestados (relacionados aos empréstimos do colaborador)
+    epis_emprestados = Epi.objects.filter(emprestimo__colaborador=colaborador).distinct()
+
+    return render(request, 'emprestimos/listar_emprestimos_colaborador.html', {
+        'colaborador': colaborador,
+        'emprestimos': emprestimos,
+        'epis_emprestados': epis_emprestados
+    })
